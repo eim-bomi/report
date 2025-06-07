@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        h2 {
+            color: #8F65B0;
+            font-weight: bolder;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            margin-right: 70px;
+            font-size: 14px;
+        }
+
+        main {
+            justify-items: center;
+            margin-top: 100px;
+            padding-bottom: 100px;
+            padding-left: 100px;
+
+        }
+
+        section {
+            margin-bottom: 300px;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: black;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .hover {
+            display: inline-block;
+            width: auto;
+        }
+
+        .hover:hover {
+            background-color: #F7F2FB;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .alert-text {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .left-section {
+
+            width: 100%;
+            margin-right: 50%;
+            padding: 0px 20px;
+            background-color: white;
+        }
+
+        .left-section h1 {
+            font-size: 64px;
+            margin: 0;
+        }
+
+        .left-section h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin: 10px 0 30px;
+        }
+
+        .left-section p {
+            margin: 6px 0;
+        }
+
+        .left-section .social a {
+            margin-right: 10px;
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .view-resume {
+            display: inline-block;
+            margin-top: 60px;
+            margin-bottom: 500px;
+            font-size: 14px;
+        }
+
+        .right-section {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100vh;
+            background-color: #849b91;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-section img {
+            width: 280px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .toggle-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            display: inline-block;
+            width: auto;
+        }
+
+        .toggle-header:hover {
+            background-color: #F7F2FB;
+
+        }
+
+        .triangle {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .rotated {
+            transform: rotate(90deg);
+            /* ▶ → ▼ */
+        }
+
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin: 10px 0;
+        }
+
+        .toggle-content.open {
+            max-height: 2000px;
+        }
+
+        .category {
+            font-weight: bold;
+            width: 120px;
+            margin-left: 20px;
+            margin-top: 60px;
+        }
+
+        .group {
+            display: flex;
+            margin-bottom: 40px;
+        }
+
+        .career-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        :root {
+            --slide-width: 270px;
+            --slide-height: 360px;
+        }
+
+        .slider-container {
+            position: relative;
+            width: var(--slide-width);
+            height: var(--slide-height);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .slider {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+
+        .slider img {
+            width: var(--slide-width);
+            height: var(--slide-height);
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+        .prev,
+        .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 9999;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .view-toggle .icon {
+            font-family: 'Material Icons';
+            font-size: 28px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            color: #666;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        .view-toggle .icon:hover {
+            background-color: #f0f0f0;
+        }
+
+        .view-toggle .icon.active {
+            color: #2e6ef7;
+            background-color: #eef2ff;
+            box-shadow: inset 0 0 4px rgba(46, 110, 247, 0.4);
+        }
+
+
+        .phone-frame {
+            width: 350px !important;
+            max-width: none;
+            flex-shrink: 0;
+            height: 740px;
+            margin: 60px auto;
+            border-radius: 36px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-frame-inner {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 0 0px;
+        }
+
+        .phone-frame-inner {
+            scroll-behavior: smooth;
+        }
+
+        body.mobile-view #main-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        body.mobile-view .container {
+            flex-direction: column;
+            height: auto;
+        }
+
+        body:not(.mobile-view) .phone-frame {
+            display: none;
+        }
+
+        body.mobile-view #main-wrapper>.container {
+            display: none;
+        }
+
+        body.mobile-view #main-wrapper::before {
+            content: '';
+            display: block;
+            width: 100%;
+        }
+
+        body.mobile-view #main-wrapper::after {
+            content: '';
+            display: block;
+            width: 100%;
+        }
+
+        body.mobile-view #main-wrapper {
+            padding: 0;
+        }
+
+        body.mobile-view #main-wrapper::before {
+            content: '';
+        }
+
+        body.mobile-view #main-wrapper .phone-frame {
+            display: block;
+        }
+
+        body:not(.mobile-view) .phone-frame {
+            display: none;
+        }
+
+        body.mobile-view .right-section {
+            position: static;
+            width: 100%;
+            height: auto;
+            order: 0;
+            padding: 40px 0;
+        }
+
+        body.mobile-view .left-section {
+            width: 100%;
+            margin: 0;
+            order: 1;
+            padding: 0px;
+        }
+
+        body.mobile-view header {
+            display: block;
+            padding: 12px 16px;
+        }
+
+        body.mobile-view nav {
+            display: none;
+        }
+
+        body.mobile-view .right-section img {
+            width: 160px;
+            height: auto;
+            border-radius: 12px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        body.mobile-view main {
+            padding-left: 20px;
+            margin-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        body.mobile-view ul,
+        body.mobile-view ul ul,
+        body.mobile-view ul li,
+        body.mobile-view li {
+            padding-left: 0;
+            margin-left: 0;
+            list-style-position: inside;
+            /* 필요 시 점을 안으로 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="view-toggle">
+        <span class="icon material-icons active" id="desktop-icon"
+            onclick="setPreview('desktop')">desktop_windows</span>
+        <div style="width:1px;height:24px;background:#ccc;"></div>
+        <span class="icon material-icons" id="mobile-icon" onclick="setPreview('mobile')">smartphone</span>
+    </div>
+    <div id="main-wrapper">
+        <div class="phone-frame">
+            <div class="phone-frame-inner">
+                <div class="container">
+                    <div class="left-section">
+                        <header>
+                            <div class="toggle-box">
+                                <div class="toggle-header alert-text">
+                                    <span id="triangle" class="triangle">▶</span> 교수님 🙋‍♀️ 이 곳을 클릭해주세요
+                                </div>
+                                <div id="toggle-content" class="toggle-content">
+                                    <p>
+                                        안녕하세요, 저는 경희사이버대학교에 재학중인 IT•디자인융학부 임보미(2025860049)입니다. <br>
+                                        Django를 사용해 "반응형 웹 페이지"를 제작해봤어요.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <nav style="margin-left: 50px;">
+                                <a href="#intro" class="hover">소개</a>
+                                <a href="#career" class="hover">경력</a>
+                            </nav>
+                        </header>
+                        <main>
+                            <div class="main">
+                                <h1>임보미</h1>
+                                <h2 style="color: black;">프로 디깅러 품질관리자</h2>
+                                <div class="toggle-box">
+                                    <div class="toggle-header">
+                                        <span id="triangle" class="triangle">▶</span> 연락하기!
+                                    </div>
+                                    <div id="toggle-content" class="toggle-content">
+                                        <p><strong style="background-color: #F7F2FB;">Email</strong> | ebm@kakao.com</p>
+                                        <p><strong style="background-color: #F7F2FB;">Phone</strong> | 010-4905-2536</p>
+                                    </div>
+                                </div>
+
+                                <a href="#intro" class="view-resume">전체 이력서 보기 ↓</a>
+
+
+                                <section id="intro" class="intro">
+                                    <br><br>
+                                    <h2>💁 QA</h2>
+                                    <hr>
+                                    <ul>
+                                        <li style="margin: 10px 0">안녕하세요! <span
+                                                style="color: #8F65B0; font-weight: bold;">프로
+                                                디깅러
+                                                품질관리자</span> 임보미입니다.</li>
+                                        <li>즐기면서 일할 줄 아는 센스 있는 사람이에요.</li>
+                                        <li>월드맵에 있는 1px의 점도 찾는 치밀함을 가지고 있어요.</li>
+                                        <li>무슨 일을 하든 애매하게 대충 하지 않고, 정점을 찍으려고 노력해요.</li>
+                                        <li>자동화 API 툴은 써보진 않았지만, 관심을 갖고 관련 영상이나 글을 찾아봐요.</li>
+                                    </ul>
+
+
+                                </section>
+                                <section id="skills">
+                                    <br><br>
+                                    <h2>🛠️ Stacks</h2>
+                                    <hr>
+                                    <div>
+                                        <div class="group">
+                                            <div class="category">Front-End</div>
+                                            <ul>
+                                                <li>HTML5 / 중급</li>
+                                                <li>CSS / 중급</li>
+                                                <li>JavaScript / 초급</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="group">
+                                            <div class="category">Design</div>
+                                            <ul>
+                                                <li>Adobe Photoshop</li>
+                                                <li>Adobe Illustrator</li>
+                                                <li>Adobe XD</li>
+                                                <li>Figma</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="group">
+                                            <div class="category">Tools</div>
+                                            <ul>
+                                                <li>Slack</li>
+                                                <li>Jira Confluence</li>
+                                                <li>Redmine</li>
+                                                <li>Jenkins</li>
+                                                <li>Testrail</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section id="career">
+                                    <br><br>
+                                    <h2>👉 경력</h2>
+                                    <hr>
+                                    <h3>1) 선데이토즈 QA (20.04~22.05)</h3>
+                                    <div class="toggle-box">
+                                        <div class="toggle-header">
+                                            <span id="triangle" class="triangle">▶</span> 1. (Moblie) Webare Bears The
+                                            Puzzle
+                                        </div>
+                                        <div id="toggle-content" class="toggle-content">
+                                            {% load static %}
+                                            <img src="{% static 'images/career_1.png' %}" class="career-image">
+                                            <ul>
+                                                <div class="toggle-box">
+                                                    <div class="toggle-header">
+                                                        <span id="triangle" class="triangle">▶</span> 수행 업무
+                                                    </div>
+                                                    <div id="toggle-content" class="toggle-content">
+                                                        <p>
+                                                            구글플레이, 앱스토어, 삼성스토어에 국내/유럽/글로벌 총 6개의 빌드를 프로젝트 리딩했습니다.<br>
+                                                            동시에 6개의 빌드를 일정관리하며 QA 및 업데이트 진행했습니다.<br>
+                                                            주로 경쟁 이벤트와 레벨 위주의 업데이트가 진행되었으며, 소프트웨어 업데이트 관련 ATT QA
+                                                            진행했습니다.<br>
+                                                            Notion을 통해 빌드별로 Bug를 관리하고 일정을 정리했습니다.
+                                                        </p>
+                                                        <br>
+                                                        <li>- Webare Bears The Puzzle 국내/유럽/글로벌 서비스 (AOS/iOS APP)</li>
+                                                        <li>- UI/UX 개편 진행</li>
+                                                        <li>- Test Case 설계, 작성, 배포</li>
+                                                        <li>- DB 명세서 작성</li>
+                                                        <li>- DB 데이터 수정 및 배포</li>
+                                                        <li>- 업무 가이드 문서 작성</li>
+
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="toggle-box">
+                                        <div class="toggle-header">
+                                            <span id="triangle" class="triangle">▶</span> 2. (Moblie) Slot Mate/Bingo
+                                            Mate
+                                        </div>
+                                        <div id="toggle-content" class="toggle-content">
+                                            {% load static %}
+                                            <img src="{% static 'images/career_2.png' %}" class="career-image">
+                                            <ul>
+                                                <div class="toggle-box">
+                                                    <div class="toggle-header">
+                                                        <span id="triangle" class="triangle">▶</span> 수행 업무
+                                                    </div>
+                                                    <div id="toggle-content" class="toggle-content">
+                                                        <p>
+                                                            페이스북에서 서비스 중인 인스턴트 앱 Slot Mate, Bingo Mate 프로젝트 QA를
+                                                            담당했습니다.<br>
+                                                            주로 신규 슬롯에 대한 QA를 진행했으며, 슬롯은 경우의 수가 너무 많아 주로 DB 검수에 많은 시간을
+                                                            쏟았습니다.<br>
+                                                            입사한지 7일도 되지 않아 Slot Mate DB 분석 후 DB 테이블에 대한 명세서를 작성 및
+                                                            공유했습니다.<br>
+                                                            Bingo Mate의 경우 릴리즈하기 전 단계까지 프로젝트 테스트를 진행했으며,<br>
+                                                            인원이 많이 필요한 콘텐츠인 만큼 개발팀 사람들과 협업하여 업무를 했습니다.
+                                                        </p>
+                                                        <br>
+                                                        <li>- 페이스북 인스턴트 앱 QA</li>
+                                                        <li>- Test Case 설계,작성,배포</li>
+                                                        <li>- DB 명세서 작성</li>
+
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <h3>2) 오르투스게임즈 QA (17.12~19.05)</h3>
+                                    <div class="toggle-box">
+                                        <div class="toggle-header">
+                                            <span id="triangle" class="triangle">▶</span> 1. (Moblie) Devil Crasher
+                                        </div>
+                                        <div id="toggle-content" class="toggle-content">
+                                            {% load static %}
+                                            <img src="{% static 'images/career_3.png' %}" class="career-image">
+                                            <ul>
+                                                <div class="toggle-box">
+                                                    <div class="toggle-header">
+                                                        <span id="triangle" class="triangle">▶</span> 수행 업무
+                                                    </div>
+                                                    <div id="toggle-content" class="toggle-content">
+                                                        <p>
+                                                            오르투스게임즈에 당시 QA직무가 없어 'QA최초'로 입사를 하게됐습니다.<br>
+                                                            입사첫날에 빌드를 퍼블리셔에게 전달하는 날이었지만 빠른 적응력으로 업무를 파악해<br>
+                                                            버그 개수를 취합하고 계속 전 사원에게 진행 상황을 공유했습니다.<br><br>
+                                                            QA 직무에 대생소하거나 모르는 사우분들이 있어 커뮤니케이션하는데 어려움이 있었지만,<br>
+                                                            직무에 대한 설명과 협업하는 방법을 PPT로 정리하여 전 사원을 대상으로 발표를 했습니다.<br>
+                                                            이후에 동료들 사이에서 '인식을 바꿔준 보미님', '보미님덕에 회사가 많이 바뀌었어요.'등과 같은 평을
+                                                            받았습니다.
+                                                        </p>
+                                                        <br>
+                                                        <li>- Test Case 설계, 작성, 배포</li>
+                                                        <li>- 런칭전 전사테스트를 위해 테스트시나리오 및 가이드 배포하여 QA 진행</li>
+                                                        <li>- 월드맵에 있는 1px 점을 매의 눈으로 발견함</li>
+                                                        <li>- 런친전인 개발 특성상 빌드가 늦게 나오고, 테스트할 시간이 부족해 Unity 세팅 후 QA 진행</li>
+                                                        <li>- 구글 공유 Excel로 Bug를 관리하고 있어, JIRA 구축</li>
+
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <h3>3) 넥슨네트워크 QA (14.11~17.08)</h3>
+                                    <div class="toggle-box">
+                                        <div class="toggle-header">
+                                            <p><span id="triangle" class="triangle">▶</span>
+                                                1. (PC) Counter-Strike Nexon: Zombies <br>
+                                                <span id="triangle" class="triangle">　</span>
+                                                2. (PC) Combat Arms
+                                            </p>
+                                        </div>
+                                        <div id="toggle-content" class="toggle-content">
+                                            {% load static %}
+                                            <img src="{% static 'images/career_4.png' %}" class="career-image">
+                                            <ul>
+                                                <div class="toggle-box">
+                                                    <div class="toggle-header">
+                                                        <span id="triangle" class="triangle">▶</span> 수행 업무
+                                                    </div>
+                                                    <div id="toggle-content" class="toggle-content">
+                                                        <p>
+                                                            넥슨 유럽에서 서비스하는 Counter-Strike Nexon: Zombies와 Combat Arms QA를
+                                                            담당했습니다.
+                                                            <br>
+                                                            FPS 게임으로 Counter-Strike의 경우 Steam 플랫폼에서 서비스했습니다. <br>
+                                                            넥슨 유럽에 있는 현지 직원들과 소통하였으며, 시차로 인해 커뮤니케이션이 힘들기 때문에 <br>
+                                                            빌드를 전달받을 때 필요한 아이템을 미리 받을 수 있도록 프로세스를 개선했습니다. <br>
+                                                        </p>
+                                                        <br>
+                                                        <li>- 넥슨 유럽에서 일하고 있는 외국인 직원과 커뮤니케이션 진행</li>
+                                                        <li>- 넥슨 네트웍스는 퍼블리셔로 각 회사와 커뮤니케이션 진행 (넥슨코리아-개발팀, 넥슨유럽-사업팀)</li>
+                                                        <li>- 리스크 분석 기법 시도</li>
+                                                        <li>- JIRA/Confluence를 통한 일정 및 빌드 관리</li>
+
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="toggle-box">
+                                        <div class="toggle-header">
+                                            <p><span id="triangle" class="triangle">▶</span>
+                                                3. (PC) Line Of Sight <br>
+                                                <span id="triangle" class="triangle">　</span>
+                                                4. (PC) Need For Speed Edge
+                                            </p>
+                                        </div>
+                                        <div id="toggle-content" class="toggle-content">
+                                            {% load static %}
+                                            <img src="{% static 'images/career_5.png' %}" class="career-image">
+                                            <ul>
+                                                <div class="toggle-box">
+                                                    <div class="toggle-header">
+                                                        <span id="triangle" class="triangle">▶</span> 수행 업무
+                                                    </div>
+                                                    <div id="toggle-content" class="toggle-content">
+                                                        <p>
+                                                            Line Of Sight, Need For Speed Edge는 개발 초기부터 오픈 전까지 QA를
+                                                            담당했습니다. <br>
+                                                            개발 초기부터 퍼블리셔 QA를 진행했기 때문에 빌드와 컨텐츠에 대한 Full Test를 진행했습니다.
+                                                            <br>
+                                                            개발 내부에 따로 QA가 있어서 데이터적인 검증보다는 기능 동작에 중점을 두었습니다. <br>
+                                                        </p>
+                                                        <br>
+                                                        <li>- 오픈 일정 수립</li>
+                                                        <li>- Full TestCase 작성 및 QA 진행</li>
+                                                        <li>- Need for Speed Edge EA의 개발팀과 개발 QA팀과 함께 JIRA 툴로 협업하며 업무 진행
+                                                        </li>
+                                                        <li>- Line Of Sight는 스팀 플랫폼으로 넥슨유럽과 커뮤니케이션하며 협업 진행</li>
+
+                                                    </div>
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </section>
+                                <section id="hobby">
+                                    <h2>🐶 취미: 멍집사</h2>
+                                    <hr>
+                                    <ul>
+                                        <li>5개월 된 보더콜리 퍼피 견주</li>
+                                    </ul>
+
+                                    {% load static %}
+                                    <div class="slider-container">
+                                        <div class="slider">
+                                            <img src="{% static 'images/puppy_1.jpeg' %}" alt="이미지 1">
+                                            <img src="{% static 'images/puppy_2.jpeg' %}" alt="이미지 1">
+                                            <img src="{% static 'images/puppy_3.jpeg' %}" alt="이미지 1">
+                                            <img src="{% static 'images/puppy_4.jpeg' %}" alt="이미지 1">
+                                            <img src="{% static 'images/puppy_5.jpeg' %}" alt="이미지 1">
+                                        </div>
+                                        <button class="prev">‹</button>
+                                        <button class="next">›</button>
+                                    </div>
+
+                                    {% load static %}
+
+                                    <a href="https://www.instagram.com/cookie_bmch?igsh=N2JqcTFmdnptaHBq&utm_source=qr"
+                                        target="_blank">
+                                        <img src="{% static 'images/insta_qr.png' %}" alt="인스타 QR"
+                                            style="width: 300px; height: 300px; object-fit: cover;">
+
+
+                                        <p class="hover">↑ 카메라로 스캔 혹은 클릭하여 쿠키의 사진을 더 확인해주세요!</p>
+                                    </a>
+                                </section>
+                            </div>
+                        </main>
+                    </div>
+
+
+
+                    <div class="right-section">
+                        {% load static %}
+                        <img src="{% static 'images/profile.png' %}" alt="프로필 사진">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 초기 설정 (자동 뷰)
+            if (window.innerWidth <= 480) {
+                setPreview('mobile');
+            } else {
+                setPreview('desktop');
+            }
+
+            // 이후 리사이즈에 따라 자동 전환
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 480) {
+                    setPreview('mobile');
+                } else {
+                    setPreview('desktop');
+                }
+            });
+
+            // 부드러운 스크롤
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetEl = document.querySelector(targetId);
+                    if (!targetEl) return;
+
+                    const isMobile = document.body.classList.contains('mobile-view');
+                    if (isMobile) {
+                        const scrollContainer = document.querySelector('.phone-frame-inner');
+                        const offset = targetEl.offsetTop;
+                        scrollContainer.scrollTo({ top: offset, behavior: 'smooth' });
+                    } else {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+
+        function createToggleBox(container) {
+            const header = container.querySelector('.toggle-header');
+            const triangle = container.querySelector('.triangle');
+            const content = container.querySelector('.toggle-content');
+
+            function toggle() {
+                content.classList.toggle('open');
+                triangle.classList.toggle('rotated');
+            }
+
+            header.addEventListener('click', toggle);
+        }
+
+        document.querySelectorAll('.toggle-box').forEach(createToggleBox);
+
+        function typeWriter(target, text, speed = 100) {
+            let index = 0;
+            target.textContent = "";
+
+            function write() {
+                if (index < text.length) {
+                    target.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(write, speed);
+                }
+            }
+
+            write();
+        }
+
+        const tagsToAnimate = document.querySelectorAll('.main > *');
+        tagsToAnimate.forEach(el => el.classList.add('fade-in'));
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const originalText = el.dataset.text || el.textContent.trim();
+                    // typeWriter(el, originalText); // Optional
+                    el.classList.add('show');
+                    observer.unobserve(el);
+                }
+            });
+        });
+
+        tagsToAnimate.forEach(el => observer.observe(el));
+
+        const slider = document.querySelector('.slider');
+        const images = document.querySelectorAll('.slider img');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+
+        let index = 0;
+        function updateSlider() {
+            const slideWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--slide-width'));
+            slider.style.transform = `translateX(-${index * slideWidth}px)`;
+        }
+
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => {
+                index = (index - 1 + images.length) % images.length;
+                updateSlider();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                index = (index + 1) % images.length;
+                updateSlider();
+            });
+        }
+
+        function setPreview(mode) {
+            const body = document.body;
+            const desktopIcon = document.getElementById('desktop-icon');
+            const mobileIcon = document.getElementById('mobile-icon');
+            const wrapper = document.getElementById('main-wrapper');
+            const container = document.querySelector('.container');
+
+            if (mode === 'mobile') {
+                body.classList.add('mobile-view');
+                desktopIcon.classList.remove('active');
+                mobileIcon.classList.add('active');
+
+                let frame = document.querySelector('.phone-frame');
+                if (!frame) {
+                    frame = document.createElement('div');
+                    frame.className = 'phone-frame';
+                    frame.innerHTML = `<div class="phone-frame-inner"></div>`;
+                    wrapper.appendChild(frame);
+                }
+                frame.querySelector('.phone-frame-inner').appendChild(container);
+            } else {
+                body.classList.remove('mobile-view');
+                desktopIcon.classList.add('active');
+                mobileIcon.classList.remove('active');
+
+                const frame = document.querySelector('.phone-frame');
+                if (frame) {
+                    wrapper.appendChild(container);
+                    frame.remove();
+                }
+            }
+        }
+
+    </script>
+
+
+</body>
+
+</html>
