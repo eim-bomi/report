@@ -32,7 +32,7 @@ pip install django
 python manage.py runserver
 ```
 
-4. 웹 브라우저에서 `[http://127.0.0.1:8000/](http://localhost:8000/portfolio)` 접속
+4. 웹 브라우저에서 `http://localhost:8000/portfolio` 접속
 
 ## 주요 기능 및 구성
 
